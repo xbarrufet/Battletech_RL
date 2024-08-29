@@ -108,7 +108,7 @@ Current development is on the implementation of 1-on-1 system under certain prem
 * Firing system is Automatic and all weapons are fired in a row
 * First Version is based on Policy Gradient algorithm
 
-# Action Space
+### Action Space
 Movement action space contains all possible movements, this is cell x Facing x Movement Type (walk, run, jump).The simulation environemtn returns all allowed movements based on cell type, movement type
 
 
