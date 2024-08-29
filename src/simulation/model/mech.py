@@ -84,3 +84,7 @@ class BattleMech(Mech):
     
     def is_destroyed(self):
          return sum(self.remaining_armor)<=0
+     
+     
+    def get_num_of_travessed_cells(self):
+         return utils.position_distance(self.position, self.former_position)

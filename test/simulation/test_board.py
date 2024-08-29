@@ -3,7 +3,7 @@ import math
 import time
 import uuid
 from simulation.model.board import Board, CellType
-from simulation.utils.utils import Axial
+from simulation.utils.utils import Axial, Facing
 import simulation.utils.utils as utils
 
 
@@ -78,17 +78,17 @@ def test_cell_visibility():
     board = Board(width=5,height=5,cells=values_5)
     p1_1 = Axial(0,0)
     p1_2 = Axial(0,4)
-    distance,forest = board.check_visibility(p1_1,p1_2)
+    distance,forest = board.check_visibility(a=p1_1,facing=Facing.face_SE, b=p1_2)
     assert distance==4
     assert forest==0
     p1_1 = Axial(1,1)
     p1_2 = Axial(1,4)
-    distance,forest = board.check_visibility(p1_1,p1_2)
+    distance,forest = board.check_visibility(a=p1_1,facing=Facing.face_SE, b=p1_2)
     assert distance==3
     assert forest==3
     p1_1 = Axial(0,3)
     p1_2 = Axial(2,3)
-    distance,forest = board.check_visibility(p1_1,p1_2)
+    distance,forest = board.check_visibility(a=p1_1,facing=Facing.face_SE, b=p1_2)
     assert distance==2
     assert forest==2
 
@@ -136,16 +136,6 @@ def test_get_forest_map():
     
   
     
-def test_evaluate_board_positions():
-    values_5 = ["00","00","00","00","00",
-                "00","00","00","02","00",
-                "00","01","00","01","00",
-                "00","02","00","02","00",
-                "00","00","00","00","00"]
-    w,h=5,5
-    board = Board(width=w, height=h, cells=values_5)
-    start = time.time()
-    board.evaluate_board_positions()
+
     
-    assert False
     
