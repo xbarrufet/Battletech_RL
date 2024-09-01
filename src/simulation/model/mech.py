@@ -2,7 +2,7 @@ from typing import NamedTuple
 from dataclasses import dataclass
 from enum import Enum
 
-from simulation.model.mech_utils import Action, MechState, Movement, MovementDirection, RotatetDirection,allowed_state_actions
+from simulation.model.mech_utils import Action, MechState, MovementType, MovementDirection, RotatetDirection,allowed_state_actions
 from simulation.model.weapon import Weapon
 from simulation.utils.utils import Axial,Facing
 import simulation.utils.utils as utils
@@ -24,18 +24,17 @@ class BattleMech(Mech):
         Mech.__init__(self,mech_type=mech_type, movement=movement,weapons=weapons,base_armor=base_armor)
         self.mech_id= mech_id
         self.remaining_armor = base_armor
-        self.movementType=Movement.mv_steady
+        self.movementType=None
         self.remaining_movement = 0
         self.position = deployment_position
         self.former_position = deployment_position
         self.facing = Facing(facing)
         self.former_facing = deployment_position
         self.gunner_skill = 4
-        self.turn_damage_done=0
+        self.turn_damage_done=0 
         self.turn_damage_received=0
-        self.allowed_actions_list = []
 
-    def move_mech(self, movement_type: Movement,new_position:Axial, new_facing:Facing):
+    def move_mech(self, movement_type: MovementType,new_position:Axial, new_facing:Facing):
         self.former_position=self.position
         self.position=new_position
         self.former_facing=self.facing
@@ -62,8 +61,8 @@ class BattleMech(Mech):
                      damage += weapon.fire_weapon(gunner_skill=self.gunner_skill, 
                                                   distance=distance,
                                                     attacker_movement_type=self.movementType,
-                                                    target_modifier=targe_travessed_cells, 
-                                                    terrain_modifier=blockers)
+                                                    target_modifier=target_travessed_cells, 
+                                                    terrain_modifier=visibility)
                 damage = int(damage)
                 self.turn_damage_done+=damage
                 return damage
@@ -87,4 +86,5 @@ class BattleMech(Mech):
      
      
     def get_num_of_travessed_cells(self):
-         return utils.position_distance(self.position, self.former_position)
+        ''' returns the effective distance moved by the Mech, it's a simplification of the rule'''
+        return utils.position_distance(self.position, self.former_position)

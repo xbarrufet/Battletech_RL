@@ -49,11 +49,10 @@ class Location(Enum):
     loc_LeftLeg = 6
     loc_LeftTorso = 7
 
-class Movement(Enum):
+class MovementType(Enum):
     mv_walk = 0
     mv_run = 1
     mv_jump = 2
-    mv_steady =-1
     
 class MovementDirection(Enum):
     md_forward = 0
@@ -77,13 +76,13 @@ def dice_1D6_prob(limit=6)->float:
     return max(0,(6-limit)* 1/6)
 
 
-def table_attacker_movement(movementType:Movement)->int:
+def table_attacker_movement(movementType:MovementType)->int:
      match movementType:
-          case Movement.mv_walk:
+          case MovementType.mv_walk:
                return 1
-          case Movement.mv_run:
+          case MovementType.mv_run:
                return 2
-          case Movement.mv_jump:
+          case MovementType.mv_jump:
                return 3
           case _:
                return 0

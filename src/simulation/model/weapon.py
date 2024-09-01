@@ -13,8 +13,9 @@ class WeaponStats:
     
 
 class Weapon(WeaponStats):
-    def __init__(self, name: str,damage: int ,range: list[int],location:mech_utils.Location, initial_ammo:int =-1,volley_number: int=1) -> None:
+    def __init__(self, weapon_id:str,name: str,damage: int ,range: list[int],location:mech_utils.Location, initial_ammo:int =-1,volley_number: int=1) -> None:
         WeaponStats.__init__(self, name=name, damage=damage, range=range, volley_number=volley_number)
+        self.weapon_id=weapon_id
         self.location=location
         self.initial_ammo=initial_ammo
         self.remaining_ammo = initial_ammo

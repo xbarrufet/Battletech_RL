@@ -94,22 +94,42 @@ I'm developing it in different phases based on the Battltech rules flavours, sta
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Beginning Rules
+- [x] Beginning Rules V1
   - [x] 1-on-1 movement 
   - [ ] 1-on-1 Firing
 - [ ] Multi-Mech support
 - [ ] ..will see
     
 
-## September 2024
+## Beginning Rules V1
+
+### Obsevation Space
+Current Observation Space contains
+* Mech positions and Facing
+* Mech distances
+* Movement Type done
+* Visibilty (is in frontal Arc?)
+
+### Action Space
+Movement action space contains all possible movements, this is:
+* Number of Board Cells (15x17) x Facing (6) x Movement Type (3 walk, run, jump)
+The simulation environment returns all allowed movements based as a bits array included within the observations3
+
+### Considerations
 Current development is on the implementation of 1-on-1 system under certain premises
 * Simulation uses impacts probabilities as damage% to avoid stochastic processes
 * Trasverssed Hex is reduced to distance
 * Firing system is Automatic and all weapons are fired in a row
 * First Version is based on Policy Gradient algorithm
 
-### Action Space
-Movement action space contains all possible movements, this is cell x Facing x Movement Type (walk, run, jump).The simulation environemtn returns all allowed movements based on cell type, movement type
+### Change log
+28/08/24: Initial Version
+* Environment
+* Basic Modelling
+* Policy Gradient Agent for Movement calculation
+  * Rewards based on probabilty the obtain a hit calcultaing all the dice modifiers (GATOR) 
+
+
 
 
 

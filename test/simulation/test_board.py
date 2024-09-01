@@ -93,6 +93,22 @@ def test_cell_visibility():
     assert forest==2
 
 
+def test_allowed_actions():
+    values_5 = ["00","00","00","00","00",
+                "00","00","00","02","00",
+                "00","01","00","01","00",
+                "00","02","00","02","00",
+                "00","00","00","00","00"]
+    board = Board(width=5,height=5,cells=values_5)
+    res = board.allowed_movements(2,0, Axial(0,0),Facing.face_S,{},False)
+    dist=[[],[],[]]
+    for d in range(3):
+        dist[d] = [k for k,v in res.items() if v ==d]
+    for d in range(3):
+        print(f"dist{d} :{dist[d]}")
+    assert len(res.keys()) == 10
+
+
 def test_is_in_arc():
     a=Axial(3,3)
     assert utils.is_in_frontal_act(a,utils.Facing.face_N,Axial(3,1))
@@ -131,8 +147,7 @@ def test_get_forest_map():
         assert forest[od_Light[1]][od_Light[0]] == 1
         assert forest[od_Heavy[1]][od_Heavy[0]] == 2
     except Exception as e:
-        print(e)
-        assert False
+        assert False,e
     
   
     

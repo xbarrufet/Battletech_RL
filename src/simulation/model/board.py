@@ -133,26 +133,28 @@ class Board:
             result[a]=cell_result
         return result        
         
-    def allowed_movements(self, remaining_movement:int, current_cell:Axial, current_facing:Facing,cells:Dict, back_allowed:bool)->Dict:
+    def allowed_movements(self, remaining_movement:int, distance_from_origin:int,current_cell:Axial, current_facing:Facing,cells:Dict, back_allowed:bool)->Dict:
         if remaining_movement==0:
             if not (current_cell, current_facing) in cells:
-                cells[(current_cell, current_facing)]=1
+                cells[(current_cell, current_facing)]=distance_from_origin
         elif remaining_movement>0:
-            if not (current_cell, current_facing) in cells:
-                cells[(current_cell, current_facing)]=1
-                face_left = Facing((current_facing.value-1)% 6)
-                face_right =Facing((current_facing.value+1)% 6)
-                cells =  self.allowed_movements( remaining_movement=remaining_movement-1, current_cell=current_cell, current_facing=face_left, back_allowed=back_allowed, cells=cells)    
-                cells =  self.allowed_movements( remaining_movement=remaining_movement-1, current_cell=current_cell, current_facing=face_right, back_allowed=back_allowed, cells=cells)    
-                cell_forward_pos=utils.move_forward(current_cell, current_facing)
-                cell_backward_pos=utils.move_backward(current_cell, current_facing)
-                if self.is_valid_cell_position(cell_forward_pos):    
-                    cell = self.get_cell(cell_forward_pos)
-                    cells =  self.allowed_movements( remaining_movement=remaining_movement-cell.movement_needed(),current_cell=cell_forward_pos,current_facing=current_facing,back_allowed=back_allowed,cells=cells)       
-                if self.is_valid_cell_position(cell_backward_pos) and back_allowed:    
-                    cell = self.get_cell(cell_backward_pos)
-                    cells =   self.allowed_movements( remaining_movement=remaining_movement-cell.movement_needed(),current_cell=cell_backward_pos,current_facing=current_facing,back_allowed=back_allowed, cells=cells)       
-        
+            if not  (current_cell, current_facing) in cells:
+                cells[(current_cell, current_facing)]=distance_from_origin
+            face_left = Facing((current_facing.value-1)% 6)
+            face_right =Facing((current_facing.value+1)% 6)
+            if not  (current_cell, face_left) in cells:
+                cells =  self.allowed_movements( remaining_movement=remaining_movement-1,distance_from_origin=distance_from_origin+1, current_cell=current_cell, current_facing=face_left, back_allowed=back_allowed, cells=cells)    
+            if not  (current_cell, face_right) in cells:
+                cells =  self.allowed_movements( remaining_movement=remaining_movement-1, distance_from_origin=distance_from_origin+1,current_cell=current_cell, current_facing=face_right, back_allowed=back_allowed, cells=cells)    
+            cell_forward_pos=utils.move_forward(current_cell, current_facing)
+            cell_backward_pos=utils.move_backward(current_cell, current_facing)
+            if self.is_valid_cell_position(cell_forward_pos) and not (cell_forward_pos,current_facing) in cells:
+                cell = self.get_cell(cell_forward_pos)
+                cells =  self.allowed_movements( remaining_movement=remaining_movement-cell.movement_needed(),distance_from_origin=distance_from_origin+cell.movement_needed() ,current_cell=cell_forward_pos,current_facing=current_facing,back_allowed=back_allowed,cells=cells)       
+            if self.is_valid_cell_position(cell_backward_pos) and not (cell_backward_pos,current_facing) in cells and back_allowed:    
+                cell = self.get_cell(cell_backward_pos)
+                cells =   self.allowed_movements( remaining_movement=remaining_movement-cell.movement_needed(),distance_from_origin=distance_from_origin+cell.movement_needed(),current_cell=cell_backward_pos,current_facing=current_facing,back_allowed=back_allowed, cells=cells)       
+            
         return cells  
     
     def allowed_jump_movements(self, jump_max_movement:int, current_cell:Axial)->Dict:
